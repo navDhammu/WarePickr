@@ -1,4 +1,4 @@
-import { GIFT_BOX_IDS, ITEM_IDS } from './constants.ts';
+import { GIFT_BOX_IDS } from './constants.ts';
 
 export default {
    [GIFT_BOX_IDS.VALENTINE]: {
