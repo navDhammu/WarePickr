@@ -1,9 +1,11 @@
-import { formatRelative } from 'date-fns';
-import { Calendar, type CalendarProps } from 'primereact/calendar';
+import { yesterday } from '@/app/lib/dateUtils';
+import { formatRelative, isSameDay } from 'date-fns';
+import { Button } from 'primereact/button';
+import { Calendar } from 'primereact/calendar';
 
 type TableHeaderProps = {
    date: Date;
-   onDateChange: CalendarProps['onChange'];
+   onDateChange: (date: Date) => void;
 };
 
 export default function TableHeader({ date, onDateChange }: TableHeaderProps) {
@@ -15,13 +17,25 @@ export default function TableHeader({ date, onDateChange }: TableHeaderProps) {
                {formatRelativeCustom(date, new Date()).toUpperCase()}
             </span>
          </h2>
-         <Calendar
-            className='mb-3'
-            dateFormat='yy-mm-dd'
-            value={date}
-            onChange={onDateChange}
-            showIcon
-         />
+         <div className='flex gap-4'>
+            {!isSameDay(date, yesterday()) && (
+               <Button
+                  className='h-12'
+                  label='Jump to yesterday'
+                  severity='info'
+                  outlined
+                  onClick={() => onDateChange(yesterday())}
+               />
+            )}
+
+            <Calendar
+               className='mb-3'
+               dateFormat='yy-mm-dd'
+               value={date}
+               onChange={({ value }) => onDateChange(value!)}
+               showIcon
+            />
+         </div>
       </div>
    );
 }

@@ -38,16 +38,7 @@ export default function Home() {
             value={pickList}
             emptyMessage={<EmptyState loading={loading} />}
             tableStyle={{ minWidth: '50rem' }}
-            header={
-               <TableHeader
-                  date={date}
-                  onDateChange={({ value }) => {
-                     if (value) {
-                        fetchPickList(value);
-                     }
-                  }}
-               />
-            }
+            header={<TableHeader date={date} onDateChange={fetchPickList} />}
          >
             <Column field='id' header='Id'></Column>
             <Column field='name' header='Name'></Column>
