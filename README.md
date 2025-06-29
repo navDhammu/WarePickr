@@ -1,36 +1,55 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# WarePickr
 
-## Getting Started
+This is a simple web application built to automate the process of generating a pick list for warehouse teams based on customer orders. It was created as part of a technical assessment.
 
-First, run the development server:
+---
+
+## Overview
+
+Customers order gift boxes containing multiple individual items. The warehouse needs a consolidated pick list of all individual items required for all orders from the previous day.
+
+This application:
+
+-  Loads mock order data (`orders.json`) representing customer orders.
+-  Maps each gift box in the orders to its individual items.
+-  Aggregates quantities of each item needed.
+-  Displays a pick list for warehouse staff to efficiently pick products.
+-  Supports filtering by date (defaulting to previous day).
+-  Provides an API for fetching pick lists.
+-  Includes a simple UI demonstrating the pick list.
+
+---
+
+## Tech Stack
+
+-  **Next.js** with API routes for backend logic
+-  **React** and **TypeScript** for frontend UI
+
+---
+
+## Project Structure
+
+-  `/data` — Contains mock data files (`orders.json`, etc.)
+-  `/src` — Application source code
+   -  `/app/api` — API route to fetch pick list data
+   -  `/app/lib` — Utility functions to generate picklist
+   -  `/app/components` — React UI components
+-  `/generateOrder.ts` — Utility script to generate mock orders for testing and seeding. For seeding, adjust `seed.ts` and run `pnpm seed`.
+
+---
+
+### Prerequisites
+
+-  Node.js (v18+)
+-  PNPM
+
+### Steps
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+git clone https://github.com/navDhammu/WarePickr.git
+cd WarePickr
+pnpm install
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Then open http://localhost:3000 in your browser.
