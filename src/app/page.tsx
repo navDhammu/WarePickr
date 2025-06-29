@@ -7,8 +7,8 @@ import { PickList } from './lib/generatePickList';
 import { subDays } from 'date-fns';
 import { formatDate } from './lib/dateUtils';
 import TableHeader from '@/components/Header';
+import TableFooter from '@/components/Footer';
 import EmptyState from '@/components/EmptyState';
-import Stats from '@/components/Stats';
 
 export default function Home() {
    const [pickList, setPickList] = useState<PickList | null>(null);
@@ -36,17 +36,17 @@ export default function Home() {
    return (
       <div className='p-2 sm:p-4 md:p-6 lg:p-8'>
          <img src='/WarePickr.png' width={150} className='mb-3' />
-         <Stats
-            stats={[
-               { label: 'Total Picks', value: pickList?.totalPicks },
-               { label: 'Total Items', value: pickList?.itemsCount },
-            ]}
-         />
          <DataTable
             value={pickList?.items}
             emptyMessage={<EmptyState loading={loading} />}
             tableStyle={{ minWidth: '50rem' }}
             header={<TableHeader date={date} onDateChange={fetchPickList} />}
+            footer={
+               <TableFooter
+                  itemsCount={pickList?.itemsCount}
+                  totalPicks={pickList?.totalPicks}
+               />
+            }
          >
             <Column field='id' header='Id' sortable />
             <Column
