@@ -4,7 +4,7 @@ import {
    valentineBox,
    birthdayBox,
    clientGiftBox,
-} from '@/app/lib/generateOrder';
+} from './generateOrder.ts';
 import { subDays } from 'date-fns';
 import { yesterday } from '@/app/lib/dateUtils.ts';
 

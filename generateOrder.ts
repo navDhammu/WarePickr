@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker';
-import boxes from '../../../data/boxes.ts';
-import { GIFT_BOX_IDS, type GiftBoxId } from '../../../data/constants.ts';
-import { formatDate, yesterday } from './dateUtils.ts';
+import boxes from '@/data/boxes.ts';
+import { GIFT_BOX_IDS, type GiftBoxId } from '@/data/constants.ts';
+import { formatDate, yesterday } from '@/app/lib/dateUtils.ts';
 
 const createLineItem = (productId: GiftBoxId) => {
    return {

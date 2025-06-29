@@ -5,7 +5,7 @@ import {
    clientGiftBox,
    generateOrder,
    valentineBox,
-} from './generateOrder.ts';
+} from '../../../generateOrder.ts';
 import boxItemsMapping from '@/data/boxItemsMapping.ts';
 import { GIFT_BOX_IDS } from '@/data/constants.ts';
 import { yesterday } from './dateUtils.ts';
