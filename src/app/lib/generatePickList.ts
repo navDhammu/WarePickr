@@ -17,39 +17,47 @@ type Order = {
    }[];
 };
 
-export type PickList = {
+type Item = (typeof items)[number] & {
    id: number;
-   name: string;
    quantity: number;
-}[];
+};
+
+const addItem = (map: Map<Item['id'], Item>, item: Item) => {
+   const prevItem = map.get(item.id);
+   if (prevItem) {
+      map.set(item.id, {
+         ...prevItem,
+         quantity: prevItem.quantity + item.quantity,
+      });
+   } else {
+      map.set(item.id, item);
+   }
+};
 
 export default function generatePickList(
    orders: Order[],
    options?: {
       date: Date;
    }
-): PickList {
+) {
    const itemsMap = new Map();
 
    for (let order of orders) {
-      if (options?.date && !isSameDay(new Date(order.orderDate), options.date))
+      if (
+         options?.date &&
+         !isSameDay(new Date(order.orderDate), options.date)
+      ) {
          continue;
+      }
 
       for (let lineItem of order.lineItems) {
          const giftBoxItems = giftBoxes[lineItem.productId].items;
          for (let { itemId, quantity } of giftBoxItems) {
             const item = { ...items[itemId], id: itemId, quantity };
-            const prevItem = itemsMap.get(itemId);
-            if (prevItem) {
-               itemsMap.set(itemId, {
-                  ...prevItem,
-                  quantity: prevItem.quantity + quantity,
-               });
-            } else {
-               itemsMap.set(itemId, item);
-            }
+            addItem(itemsMap, item);
          }
       }
    }
+
    return Array.from(itemsMap.values());
 }
