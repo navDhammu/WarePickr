@@ -1,4 +1,4 @@
-import { formatDate } from '@/app/lib/dateUtils';
+import { formatRelative } from 'date-fns';
 import { Calendar, type CalendarProps } from 'primereact/calendar';
 
 type TableHeaderProps = {
@@ -9,9 +9,11 @@ type TableHeaderProps = {
 export default function TableHeader({ date, onDateChange }: TableHeaderProps) {
    return (
       <div className='flex justify-between'>
-         <h2 className='text-lg font-semibold'>
-            Pick List for{' '}
-            <span className='text-cyan-700'>{formatDate(date)}</span>
+         <h2 className='text-lg'>
+            <span className='font-semibold'>Pick list for: </span>
+            <span className='text-cyan-600 font-bold text-md'>
+               {formatRelativeCustom(date, new Date()).toUpperCase()}
+            </span>
          </h2>
          <Calendar
             className='mb-3'
@@ -22,4 +24,12 @@ export default function TableHeader({ date, onDateChange }: TableHeaderProps) {
          />
       </div>
    );
+}
+
+function formatRelativeCustom(date: Date, baseDate: Date) {
+   const formatted = formatRelative(date, baseDate);
+   const arr = formatted.split(' ');
+   const index = arr.findIndex((val) => val === 'at');
+   if (index > -1) return arr.slice(0, index).join(' ');
+   return formatted;
 }
