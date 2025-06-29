@@ -20,7 +20,8 @@
          }
       ],
       "paths": {
-         "@/*": ["./src/*"]
+         "@/*": ["./src/*"],
+         "@/data/*": ["./data/*"]
       }
    },
    "include": [
@@ -28,7 +29,8 @@
       "**/*.ts",
       "**/*.tsx",
       ".next/types/**/*.ts",
-      "src/app/map.mts"
+      "src/app/map.mts",
+      "src/app/api/picklist"
    ],
    "exclude": ["node_modules"]
 }
