@@ -40,9 +40,20 @@ export default function Home() {
             tableStyle={{ minWidth: '50rem' }}
             header={<TableHeader date={date} onDateChange={fetchPickList} />}
          >
-            <Column field='id' header='Id'></Column>
-            <Column field='name' header='Name'></Column>
-            <Column field='quantity' header='Quantity'></Column>
+            <Column field='id' header='Id' />
+            <Column
+               field='image'
+               header='Image'
+               body={(rowData) => (
+                  <img
+                     src={rowData.image}
+                     alt='Order'
+                     className='w-16 h-16 object-cover rounded'
+                  />
+               )}
+            />
+            <Column field='name' header='Name' />
+            <Column field='quantity' header='Quantity' />
          </DataTable>
       </div>
    );
