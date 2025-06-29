@@ -2,6 +2,7 @@ import { faker } from '@faker-js/faker';
 import giftBoxes from '../../../data/giftBoxes.ts';
 import { GIFT_BOX_IDS } from '../../../data/constants.ts';
 import { endOfYesterday, formatISO } from 'date-fns';
+import { formatDate, yesterday } from './dateUtils.ts';
 
 const createLineItem = (productId: keyof typeof giftBoxes) => {
    const { items, ...giftBox } = giftBoxes[productId];
@@ -29,15 +30,20 @@ export const clientGiftBox = (count: number) => {
 };
 
 export const generateOrder = (
-   lineItems: ReturnType<typeof createLineItem>[][]
+   options: {
+      date?: Date;
+      lineItems: ReturnType<typeof createLineItem>[][];
+   }
+   // date: Date = yesterday(),
+   // lineItems: ReturnType<typeof createLineItem>[][]
 ) => {
    return {
       orderId: faker.string.uuid(),
-      orderDate: formatISO(endOfYesterday()),
+      orderDate: formatDate(options?.date ?? yesterday()),
       orderTotal: parseFloat(faker.commerce.price()),
       shippingAddress: faker.location.streetAddress({ useFullAddress: true }),
       customerName: faker.person.fullName(),
       customerEmail: faker.internet.email(),
-      lineItems: lineItems.flat(),
+      lineItems: options.lineItems.flat(),
    };
 };

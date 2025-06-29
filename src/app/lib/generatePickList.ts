@@ -1,5 +1,6 @@
 import giftBoxes from '@/data/giftBoxes.ts';
 import items from '@/data/items.ts';
+import { isSameDay } from 'date-fns';
 
 type Order = {
    orderId: string;
@@ -22,10 +23,20 @@ export type PickList = {
    quantity: number;
 }[];
 
-export default function generatePickList(orders: Order[]): PickList {
+export default function generatePickList(
+   orders: Order[],
+   options?: {
+      date: Date;
+   }
+): PickList {
    const itemsMap = new Map();
-
+   if (options?.date) {
+      const date = new Date(options.date);
+   }
    for (let order of orders) {
+      if (options?.date && !isSameDay(new Date(order.orderDate), options.date))
+         continue;
+
       for (let lineItem of order.lineItems) {
          const giftBoxItems = giftBoxes[lineItem.productId].items;
          for (let { itemId, quantity } of giftBoxItems) {

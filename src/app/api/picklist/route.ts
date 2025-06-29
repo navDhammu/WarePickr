@@ -21,7 +21,9 @@ export async function GET(request: NextRequest) {
          { status: 400 }
       );
    }
-   return NextResponse.json(generatePickList(orders));
+   return NextResponse.json(
+      generatePickList(orders, { date: new Date(dateString) })
+   );
 }
 
 function isValidDateParam(dateStr: string): boolean {

@@ -1,12 +1,19 @@
 import { test, expect, describe } from 'vitest';
 import generatePickList from './generatePickList.ts';
-import { generateOrder, valentineBox } from './generateOrder.ts';
+import {
+   birthdayBox,
+   clientGiftBox,
+   generateOrder,
+   valentineBox,
+} from './generateOrder.ts';
 import giftBoxes from '@/data/giftBoxes.ts';
 import { GIFT_BOX_IDS } from '@/data/constants.ts';
+import { yesterday } from './dateUtils.ts';
+import { subDays } from 'date-fns';
 
 describe('generatePickList', () => {
    test('returns an array of items with id, name, and quantity keys', () => {
-      const orders = [generateOrder([valentineBox(1)])];
+      const orders = [generateOrder({ lineItems: [valentineBox(1)] })];
       const pickList = generatePickList(orders);
       pickList.forEach((item) => {
          expect(item).toHaveProperty('id');
@@ -15,13 +22,13 @@ describe('generatePickList', () => {
       });
    });
    test('should not contain duplicate entries when multiple of the same box are ordered', () => {
-      const orders = [generateOrder([valentineBox(2)])];
+      const orders = [generateOrder({ lineItems: [valentineBox(2)] })];
       const pickList = generatePickList(orders);
       const expectedItems = giftBoxes[GIFT_BOX_IDS.VALENTINE].items;
       expect(pickList).toHaveLength(expectedItems.length);
    });
    test('should aggregate the quantities when multiple of the same box are ordered', () => {
-      const orders = [generateOrder([valentineBox(2)])];
+      const orders = [generateOrder({ lineItems: [valentineBox(2)] })];
       const pickList = generatePickList(orders);
       const expectedItems = giftBoxes[GIFT_BOX_IDS.VALENTINE].items;
       expectedItems.forEach((expectedItem) => {
@@ -29,5 +36,33 @@ describe('generatePickList', () => {
          expect(pick).toBeDefined();
          expect(pick?.quantity).toBe(expectedItem.quantity * 2);
       });
+   });
+
+   test('when date is passed as an option, it should only include pick list items for that date', () => {
+      const yesterdaysOrder = generateOrder({ lineItems: [clientGiftBox(1)] });
+      const twoDaysAgoOrder = generateOrder({
+         date: subDays(new Date(), 2),
+         lineItems: [birthdayBox(1)],
+      });
+      const pickList = generatePickList([yesterdaysOrder, twoDaysAgoOrder], {
+         date: yesterday(),
+      });
+
+      const expectedItemIds = giftBoxes[GIFT_BOX_IDS.CLIENT].items.map(
+         (i) => i.itemId
+      );
+      pickList.forEach((pickListItem) => {
+         expect(expectedItemIds).toContain(pickListItem.id);
+      });
+   });
+
+   test('when no order matches with date, it should return an empty array', () => {
+      const yesterdaysOrder = generateOrder({ lineItems: [clientGiftBox(1)] });
+
+      const pickList = generatePickList([yesterdaysOrder], {
+         date: subDays(new Date(), 3),
+      });
+
+      expect(pickList).toHaveLength(0);
    });
 });
