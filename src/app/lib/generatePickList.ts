@@ -36,6 +36,8 @@ const addItem = (map: ItemsMap, item: Item) => {
    }
 };
 
+export type PickList = ReturnType<typeof generatePickList>;
+
 export default function generatePickList(
    orders: Order[],
    options?: {
