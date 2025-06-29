@@ -22,7 +22,9 @@ type Item = (typeof items)[number] & {
    quantity: number;
 };
 
-const addItem = (map: Map<Item['id'], Item>, item: Item) => {
+type ItemsMap = Map<Item['id'], Item>;
+
+const addItem = (map: ItemsMap, item: Item) => {
    const prevItem = map.get(item.id);
    if (prevItem) {
       map.set(item.id, {
@@ -40,7 +42,8 @@ export default function generatePickList(
       date: Date;
    }
 ) {
-   const itemsMap = new Map();
+   const itemsMap: ItemsMap = new Map();
+   let totalPicks = 0;
 
    for (let order of orders) {
       if (
@@ -55,9 +58,14 @@ export default function generatePickList(
          for (let { itemId, quantity } of giftBoxItems) {
             const item = { ...items[itemId], id: itemId, quantity };
             addItem(itemsMap, item);
+            totalPicks++;
          }
       }
    }
 
-   return Array.from(itemsMap.values());
+   return {
+      items: Array.from(itemsMap.values()),
+      itemsCount: itemsMap.size,
+      totalPicks,
+   };
 }

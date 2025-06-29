@@ -12,27 +12,38 @@ import { yesterday } from './dateUtils.ts';
 import { subDays } from 'date-fns';
 
 describe('generatePickList', () => {
-   test('returns an array of items with id, name, and quantity keys', () => {
+   test('returns an object with items array, itemsCount and totalPicks', () => {
       const orders = [generateOrder({ lineItems: [valentineBox(1)] })];
       const pickList = generatePickList(orders);
-      pickList.forEach((item) => {
+      expect(typeof pickList).toBe('object');
+      expect(pickList).toHaveProperty('items');
+      expect(pickList).toHaveProperty('itemsCount');
+      expect(pickList).toHaveProperty('totalPicks');
+
+      for (let item of pickList.items) {
          expect(item).toHaveProperty('id');
          expect(item).toHaveProperty('name');
          expect(item).toHaveProperty('quantity');
-      });
+         expect(item).toHaveProperty('location');
+         expect(item).toHaveProperty('image');
+      }
    });
+
    test('should not contain duplicate entries when multiple of the same box are ordered', () => {
       const orders = [generateOrder({ lineItems: [valentineBox(2)] })];
       const pickList = generatePickList(orders);
       const expectedItems = giftBoxes[GIFT_BOX_IDS.VALENTINE].items;
-      expect(pickList).toHaveLength(expectedItems.length);
+      expect(pickList.items).toHaveLength(expectedItems.length);
    });
+
    test('should aggregate the quantities when multiple of the same box are ordered', () => {
       const orders = [generateOrder({ lineItems: [valentineBox(2)] })];
       const pickList = generatePickList(orders);
       const expectedItems = giftBoxes[GIFT_BOX_IDS.VALENTINE].items;
       expectedItems.forEach((expectedItem) => {
-         const pick = pickList.find((pick) => pick.id === expectedItem.itemId);
+         const pick = pickList.items.find(
+            (pick) => pick.id === expectedItem.itemId
+         );
          expect(pick).toBeDefined();
          expect(pick?.quantity).toBe(expectedItem.quantity * 2);
       });
@@ -47,22 +58,19 @@ describe('generatePickList', () => {
       const pickList = generatePickList([yesterdaysOrder, twoDaysAgoOrder], {
          date: yesterday(),
       });
-
       const expectedItemIds = giftBoxes[GIFT_BOX_IDS.CLIENT].items.map(
          (i) => i.itemId
       );
-      pickList.forEach((pickListItem) => {
+      pickList.items.forEach((pickListItem) => {
          expect(expectedItemIds).toContain(pickListItem.id);
       });
    });
 
    test('when no order matches with date, it should return an empty array', () => {
       const yesterdaysOrder = generateOrder({ lineItems: [clientGiftBox(1)] });
-
       const pickList = generatePickList([yesterdaysOrder], {
          date: subDays(new Date(), 3),
       });
-
-      expect(pickList).toHaveLength(0);
+      expect(pickList.items).toHaveLength(0);
    });
 });
