@@ -30,9 +30,7 @@ export default function generatePickList(
    }
 ): PickList {
    const itemsMap = new Map();
-   if (options?.date) {
-      const date = new Date(options.date);
-   }
+
    for (let order of orders) {
       if (options?.date && !isSameDay(new Date(order.orderDate), options.date))
          continue;
