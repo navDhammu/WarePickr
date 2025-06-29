@@ -1,6 +1,6 @@
 # WarePickr
 
-This is a simple web application built to automate the process of generating a pick list for warehouse teams based on customer orders. It was created as part of a technical assessment.
+This is a simple web application built to automate the process of generating a pick list for a fictional warehouse based on customer orders. It was created as part of a **take home assessment**.
 
 ---
 
@@ -23,7 +23,7 @@ This application:
 ## Tech Stack
 
 -  **Next.js** with API routes for backend logic
--  **React** and **TypeScript** for frontend UI
+-  **React**, **TypeScript** and **Tailwind** with Primereact for frontend UI
 
 ---
 
@@ -34,14 +34,16 @@ This application:
    -  `/app/api` — API route to fetch pick list data
    -  `/app/lib` — Utility functions to generate picklist
    -  `/app/components` — React UI components
--  `/generateOrder.ts` — Utility script to generate mock orders for testing and seeding. For seeding, adjust `seed.ts` and run `pnpm seed`.
+-  `/generateOrder.ts` — Utility script to generate mock orders for testing and seeding.
 
 ---
 
-### Prerequisites
+## Usage
+
+### Requirements
 
 -  Node.js (v18+)
--  PNPM
+-  **`pnpm`** (Install with `npm i -g pnpm@latest`) if not already installed
 
 ### Steps
 
@@ -53,3 +55,30 @@ pnpm dev
 ```
 
 Then open http://localhost:3000 in your browser.
+
+**Important:** Ensure `orders.json` has some data for the dates you want to test. And that product Id's in the line items match with the predefined id's in `/data/constants.ts`
+
+_Optionally_ - modify the orders array in `seed.ts` to make adding mock data easier for larger data sets. E.g
+
+```javascript
+const orders = [
+   // Providing no date defaults to yesterday
+   generateOrder({
+      lineItems: [valentineBox(3), clientGiftBox(2), birthdayBox(1)],
+   }),
+
+   // For 2 days ago
+   generateOrder({
+      date: subDays(yesterday(), 1),
+      lineItems: [birthdayBox(4), clientGiftBox(1)],
+   }),
+];
+```
+
+Then run `pnpm seed`
+
+## Limitations
+
+-  **Static Data Source**: The application relies on a hardcoded `orders.json` file for simulating order data. In a real-world setup, this would be replaced by a database or external API.
+-  **Limited Error Handling**: The app **assumes** valid inputs and well-structured data in the orders, and is likely to crash with malformed data. In production, this would be validated either in the database itself or in the code through schema validation.
+-  **No Authentication**: Not secured or gated for access in any way.
