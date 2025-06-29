@@ -16,20 +16,31 @@ type Order = {
    }[];
 };
 
-export default function generatePickList(orders: Order[]) {
-   const result = [];
+export type PickList = {
+   id: number;
+   name: string;
+   quantity: number;
+}[];
+
+export default function generatePickList(orders: Order[]): PickList {
+   const itemsMap = new Map();
+
    for (let order of orders) {
       for (let lineItem of order.lineItems) {
          const giftBoxItems = giftBoxes[lineItem.productId].items;
          for (let { itemId, quantity } of giftBoxItems) {
-            result.push({
-               ...items[itemId],
-               quantity,
-               id: itemId,
-            });
+            const item = { ...items[itemId], id: itemId, quantity };
+            const prevItem = itemsMap.get(itemId);
+            if (prevItem) {
+               itemsMap.set(itemId, {
+                  ...prevItem,
+                  quantity: prevItem.quantity + quantity,
+               });
+            } else {
+               itemsMap.set(itemId, item);
+            }
          }
       }
    }
-
-   return result;
+   return Array.from(itemsMap.values());
 }
