@@ -1,6 +1,8 @@
 import { PrimeReactProvider } from 'primereact/api';
 import './globals.css';
 import 'primereact/resources/themes/lara-light-cyan/theme.css';
+import 'primeicons/primeicons.css';
+
 export default function RootLayout({
    children,
 }: Readonly<{

@@ -1,5 +1,5 @@
 import { yesterday } from '@/app/lib/dateUtils';
-import { formatRelative, isSameDay } from 'date-fns';
+import { addDays, formatRelative, isSameDay, isToday, subDays } from 'date-fns';
 import { Button } from 'primereact/button';
 import { Calendar } from 'primereact/calendar';
 
@@ -11,11 +11,13 @@ type TableHeaderProps = {
 export default function TableHeader({ date, onDateChange }: TableHeaderProps) {
    return (
       <div className='flex justify-between'>
-         <h2 className='text-lg'>
-            <span className='font-semibold'>Pick list for: </span>
-            <span className='text-cyan-600 font-bold text-md'>
-               {formatRelativeCustom(date, new Date()).toUpperCase()}
+         <h2>
+            <span className='font-semibold text-slate-400 text-sm uppercase'>
+               Pick list for:{' '}
             </span>
+            <div className='text-cyan-600 font-bold capitalize text-xl'>
+               {formatRelativeCustom(date, new Date())}
+            </div>
          </h2>
          <div className='flex gap-4'>
             {!isSameDay(date, yesterday()) && (
@@ -27,7 +29,21 @@ export default function TableHeader({ date, onDateChange }: TableHeaderProps) {
                   onClick={() => onDateChange(yesterday())}
                />
             )}
-
+            <Button
+               className='h-12 w-12'
+               icon='pi pi-chevron-left'
+               size='small'
+               text
+               onClick={() => onDateChange(subDays(date, 1))}
+            />
+            <Button
+               className='h-12 w-12'
+               icon='pi pi-chevron-right'
+               size='small'
+               text
+               disabled={isToday(date)}
+               onClick={() => onDateChange(addDays(date, 1))}
+            />
             <Calendar
                className='mb-3'
                dateFormat='yy-mm-dd'
