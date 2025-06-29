@@ -16,3 +16,5 @@ export const ITEM_IDS = {
    FRUIT_BASKET: 2008,
    PEN: 2009,
 };
+
+export type GiftBoxId = (typeof GIFT_BOX_IDS)[keyof typeof GIFT_BOX_IDS];

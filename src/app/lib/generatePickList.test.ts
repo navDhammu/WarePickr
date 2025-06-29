@@ -6,7 +6,7 @@ import {
    generateOrder,
    valentineBox,
 } from './generateOrder.ts';
-import giftBoxes from '@/data/giftBoxes.ts';
+import boxItemsMapping from '@/data/boxItemsMapping.ts';
 import { GIFT_BOX_IDS } from '@/data/constants.ts';
 import { yesterday } from './dateUtils.ts';
 import { subDays } from 'date-fns';
@@ -32,14 +32,14 @@ describe('generatePickList', () => {
    test('should not contain duplicate entries when multiple of the same box are ordered', () => {
       const orders = [generateOrder({ lineItems: [valentineBox(2)] })];
       const pickList = generatePickList(orders);
-      const expectedItems = giftBoxes[GIFT_BOX_IDS.VALENTINE].items;
+      const expectedItems = boxItemsMapping[GIFT_BOX_IDS.VALENTINE];
       expect(pickList.items).toHaveLength(expectedItems.length);
    });
 
    test('should aggregate the quantities when multiple of the same box are ordered', () => {
       const orders = [generateOrder({ lineItems: [valentineBox(2)] })];
       const pickList = generatePickList(orders);
-      const expectedItems = giftBoxes[GIFT_BOX_IDS.VALENTINE].items;
+      const expectedItems = boxItemsMapping[GIFT_BOX_IDS.VALENTINE];
       expectedItems.forEach((expectedItem) => {
          const pick = pickList.items.find(
             (pick) => pick.id === expectedItem.itemId
@@ -58,8 +58,8 @@ describe('generatePickList', () => {
       const pickList = generatePickList([yesterdaysOrder, twoDaysAgoOrder], {
          date: yesterday(),
       });
-      const expectedItemIds = giftBoxes[GIFT_BOX_IDS.CLIENT].items.map(
-         (i) => i.itemId
+      const expectedItemIds = boxItemsMapping[GIFT_BOX_IDS.CLIENT].map(
+         (item) => item.itemId
       );
       pickList.items.forEach((pickListItem) => {
          expect(expectedItemIds).toContain(pickListItem.id);

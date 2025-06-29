@@ -1,12 +1,11 @@
 import { faker } from '@faker-js/faker';
-import giftBoxes from '../../../data/giftBoxes.ts';
-import { GIFT_BOX_IDS } from '../../../data/constants.ts';
+import boxes from '../../../data/boxes.ts';
+import { GIFT_BOX_IDS, type GiftBoxId } from '../../../data/constants.ts';
 import { formatDate, yesterday } from './dateUtils.ts';
 
-const createLineItem = (productId: keyof typeof giftBoxes) => {
-   const { items, ...giftBox } = giftBoxes[productId];
+const createLineItem = (productId: GiftBoxId) => {
    return {
-      ...giftBox,
+      ...boxes[productId],
       productId,
       lineItemId: `ln-${faker.string.numeric(5)}`,
    };

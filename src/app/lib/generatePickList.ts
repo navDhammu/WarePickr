@@ -1,4 +1,4 @@
-import giftBoxes from '@/data/giftBoxes.ts';
+import boxItemsMapping from '@/data/boxItemsMapping.ts';
 import items from '@/data/items.ts';
 import { isSameDay } from 'date-fns';
 
@@ -56,7 +56,7 @@ export default function generatePickList(
       }
 
       for (let lineItem of order.lineItems) {
-         const giftBoxItems = giftBoxes[lineItem.productId].items;
+         const giftBoxItems = boxItemsMapping[lineItem.productId];
          for (let { itemId, quantity } of giftBoxItems) {
             const item = { ...items[itemId], id: itemId, quantity };
             addItem(itemsMap, item);
